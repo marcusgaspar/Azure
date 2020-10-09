@@ -1,0 +1,22 @@
+# Source: https://docs.microsoft.com/en-us/cli/azure/ext/image-copy-extension/image?view=azure-cli-latest
+
+# Variables
+# Source Resource Group
+rgSource="rg-Source"
+# Target Resource Group
+rgTarget="rg-Target"
+# Target Location
+locTarget="eastus"
+# Target Subscription ID
+subIDTarget="<subscription ID>"
+# Source Image Name
+imageName="vm-image-name"
+# Target Image Name
+imageNameTarget="vm-image-name-target"
+
+# Run copy image
+az image copy --source-resource-group $rgSource \
+    --source-object-name $imageName --source-type image \
+    --target-name $imageNameTarget --target-location $locTarget \
+    --target-resource-group $rgTarget --target-subscription $subIDTarget \
+    --cleanup
