@@ -22,3 +22,6 @@ az image copy --source-resource-group $rgSource \
     --target-name $imageNameTarget --target-location $locTarget \
     --target-resource-group $rgTarget --target-subscription $subIDTarget \
     --cleanup
+
+# Validate image provisioning state
+az image list -o table
