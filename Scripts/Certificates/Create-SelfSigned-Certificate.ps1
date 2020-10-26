@@ -6,7 +6,7 @@
 $dnsName = "www.contoso.com"
 $pfxFilePath = "c:\Temp\AppGtwCert.pfx"
 #  Make sure your password is 4 - 12 characters long
-$pwd = "<password>"
+$myPwd = "<password>"
 
 # Create SelfSigned Certificate
 New-SelfSignedCertificate `
@@ -18,7 +18,7 @@ $thumbPrint = Get-ChildItem -Path Cert:\LocalMachine\My |
 Where-Object {$_.Subject -match $dnsName} | 
 Select-Object -ExpandProperty Thumbprint
 
-$pwd = ConvertTo-SecureString -String $pwd -Force -AsPlainText
+$pwd = ConvertTo-SecureString -String $myPwd -Force -AsPlainText
 
 # Export Certificate
 Export-PfxCertificate `
