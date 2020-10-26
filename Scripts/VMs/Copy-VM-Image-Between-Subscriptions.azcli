@@ -1,5 +1,7 @@
 # Source: https://docs.microsoft.com/en-us/cli/azure/ext/image-copy-extension/image?view=azure-cli-latest
 
+# Copy a managed image (or vm) to other regions or subscriptions. It requires the source disk to be available.
+
 # Variables
 # Source Resource Group
 rgSource="rg-Source"
