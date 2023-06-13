@@ -2,6 +2,10 @@
 $SubscriptionID=""
 $TenantID=""
 $Location="eastus"
+# xlsx file with TagName and TagValue columns 
+$TagFile = "C:\_repo\Azure\Scripts\Policies\Tags\Tags-Subscriptions.xlsx"
+# Log file
+$LogFile = "C:\_repo\Azure\Scripts\Policies\Tags\Create-Policies.log"
 ################################
 
 $PolicyNamePrefix="Apply Tag"
@@ -11,14 +15,19 @@ $PolicyDefinitionId="61a4d60b-7326-440e-8051-9f94394d4dd1"
 
 $RemediationNamePrefix="remediation-task"
 
-Install-Module -Name ImportExcel
+# Start logging
+Start-Transcript -Path $LogFile
+Write-Host "Script Started" -ForegroundColor Green
+
+if (-not (Get-Module -Name ImportExcel -ListAvailable)) {
+    Install-Module -Name ImportExcel -Scope CurrentUser
+}
 
 # Login to Azure
 Connect-AzAccount -Tenant $TenantID -Subscription $SubscriptionID
 
 # Read xls file with TagName and TagValue columns and create a policy for each row in the file
 # Import the Excel file
-$TagFile = "C:\_repo\Azure\Scripts\Policies\Tags\Tags.xlsx"
 $TagData = Import-Excel -Path $TagFile
 
 # Loop through each row and create a policy
@@ -59,9 +68,14 @@ foreach ($row in $TagData) {
     
     # Create Role Assignment to Grant Contributor role to the Policy system assigned identity on the scope of subscription
     # It is required by Remediation Task to apply the Tags on the resources
-    New-AzRoleAssignment -ObjectId $PolicyAssignment.Identity.principalId -RoleDefinitionName Contributor -Scope $PolicyScope 
+    New-AzRoleAssignment -ObjectId $Principal -RoleDefinitionName Contributor -Scope $PolicyScope 
     
     # Create the remediation task
     Start-AzPolicyRemediation -Name $RemediationName -PolicyAssignmentId  $PolicyAssignmentId -ResourceDiscoveryMode ReEvaluateCompliance -Scope $PolicyScope
 
 }   
+
+Write-Host "Script finished" -ForegroundColor Green
+
+# Stop logging
+Stop-Transcript
