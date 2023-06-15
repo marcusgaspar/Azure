@@ -23,6 +23,10 @@ if (-not (Get-Module -Name ImportExcel -ListAvailable)) {
     Install-Module -Name ImportExcel -Scope CurrentUser
 }
 
+if (-not (Get-Module -Name Az -ListAvailable)) {
+    Install-Module -Name Az -Scope CurrentUser
+}
+
 # Login to Azure
 Connect-AzAccount -Tenant $TenantID -Subscription $SubscriptionID
 
