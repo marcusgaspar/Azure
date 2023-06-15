@@ -1,6 +1,6 @@
 #### Change parameters here #####
-$SubscriptionID="50e6fbdc-6729-4bbc-9cdb-7fc8b7b32311"
-$TenantID="16b3c013-d300-468d-ac64-7eda0820b6d3"
+$SubscriptionID=""
+$TenantID=""
 $Location="eastus"
 # xlsx file with TagName and TagValue columns 
 $TagFile = "C:\_repo\Azure\Scripts\Policies\Tags\Tags-Subscriptions.xlsx"
