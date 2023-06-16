@@ -1,5 +1,4 @@
 #### Change parameters here #####
-$SubscriptionID=""
 $TenantID=""
 $Location="eastus"
 # xlsx file with TagName and TagValue columns 
@@ -27,11 +26,10 @@ if (-not (Get-Module -Name Az -ListAvailable)) {
 }
 
 # Login to Azure
-Connect-AzAccount -Tenant $TenantID -Subscription $SubscriptionID
+Connect-AzAccount -Tenant $TenantID
 
 Write-Host "Reading Excel file..." -ForegroundColor Green
 # Read xls file with TagName and TagValue columns and create a policy for each row in the file
-# Import the Excel file
 $TagData = Import-Excel -Path $TagFile
 
 # Loop through each row and create a policy
@@ -46,8 +44,8 @@ foreach ($row in $TagData) {
     $RemediationName="$RemediationNamePrefix-$datetimestring"
 
     # Get the subscription ID and Set the context to the subscription
-    $SubscriptionID = (Get-AzSubscription -SubscriptionName $SubscriptionName).Id
-    Set-AzContext -Subscription $SubscriptionID
+    $SubscriptionID = (Get-AzSubscription -SubscriptionName $SubscriptionName -TenantId $TenantID).Id
+    Set-AzContext -Subscription $SubscriptionID -Tenant $TenantID
 
     # Get the RG resource ID
     $RGReourceId = (Get-AzResourceGroup -Name $RGName).ResourceId

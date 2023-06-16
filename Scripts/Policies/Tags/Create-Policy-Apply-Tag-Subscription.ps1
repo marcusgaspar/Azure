@@ -1,5 +1,4 @@
 #### Change parameters here #####
-$SubscriptionID=""
 $TenantID=""
 $Location="eastus"
 # xlsx file with TagName and TagValue columns 
@@ -10,7 +9,6 @@ $LogFile = "C:\_repo\Azure\Scripts\Policies\Tags\Create-Policies.log"
 
 $PolicyNamePrefix="Apply Tag"
 $PolicyDescription="Adds or replaces the specified tag and value on subscriptions via a remediation task. Existing resource groups can be remediated by triggering a remediation task."
-$PolicyScope="/subscriptions/$SubscriptionID"
 $PolicyDefinitionId="61a4d60b-7326-440e-8051-9f94394d4dd1"
 
 $RemediationNamePrefix="remediation-task"
@@ -28,7 +26,7 @@ if (-not (Get-Module -Name Az -ListAvailable)) {
 }
 
 # Login to Azure
-Connect-AzAccount -Tenant $TenantID -Subscription $SubscriptionID
+Connect-AzAccount -Tenant $TenantID
 
 # Read xls file with TagName and TagValue columns and create a policy for each row in the file
 # Import the Excel file
@@ -44,7 +42,9 @@ foreach ($row in $TagData) {
     $RemediationName="$RemediationNamePrefix-$datetimestring"
 
     #Get the subscription ID
-    $SubscriptionID = (Get-AzSubscription -SubscriptionName $SubscriptionName).Id
+    $SubscriptionID = (Get-AzSubscription -SubscriptionName $SubscriptionName -TenantId $TenantID).Id
+    Set-AzContext -Subscription $SubscriptionID -Tenant $TenantID
+    $PolicyScope="/subscriptions/$SubscriptionID"
 
     # Create the policy using the tag name and value
     $PolicyParamTag = @{tagName = @{value = $TagName}; tagValue = @{value = $TagValue}}

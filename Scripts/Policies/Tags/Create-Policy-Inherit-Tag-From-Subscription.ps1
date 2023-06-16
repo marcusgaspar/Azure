@@ -1,5 +1,4 @@
 #### Change parameters here #####
-$SubscriptionID=""
 $TenantID=""
 $Location="eastus"
 # xlsx file with TagName and TagValue columns 
@@ -11,7 +10,6 @@ $PolicyJsonPath = "C:\_repo\Azure\Scripts\Policies\Tags\Custom-Policy-Inherit-a-
 ################################
 
 $PolicyNamePrefix="Inherit Tag from"
-$PolicyScope="/subscriptions/$SubscriptionID"
 # Name of the new Custom Policy Definition based on the Default Policy Definition ("Inherit a tag from the subscription")
 $PolicyDefinitionName = "Inherit a tag from the subscription (RGs and Resources)"
 $PolicyDefinitionDescription="Adds or replaces the specified tag and value from the containing subscription when any Resource Group or resource is created or updated. Existing resources can be remediated by triggering a remediation task."
@@ -31,7 +29,7 @@ if (-not (Get-Module -Name Az -ListAvailable)) {
 }
 
 # Login to Azure
-Connect-AzAccount -Tenant $TenantID -Subscription $SubscriptionID
+Connect-AzAccount -Tenant $TenantID
 
 # Read xls file with TagName and TagValue columns and create a policy for each row in the file
 # Import the Excel file
@@ -52,9 +50,10 @@ foreach ($row in $TagData) {
     $RemediationName="$RemediationNamePrefix-$datetimestring"
 
     #Get the subscription ID
-    $SubscriptionID = (Get-AzSubscription -SubscriptionName $SubscriptionName).Id
-    Set-AzContext -Subscription $SubscriptionID
-    
+    $SubscriptionID = (Get-AzSubscription -SubscriptionName $SubscriptionName -TenantId $TenantID).Id
+    Set-AzContext -Subscription $SubscriptionID -Tenant $TenantID
+    $PolicyScope="/subscriptions/$SubscriptionID"
+
     # Create the policy using the tag name and value
     $PolicyParamTag = @{tagName = @{value = $TagName}}
     $PolicyParamTagJson = $PolicyParamTag | ConvertTo-Json
