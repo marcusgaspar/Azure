@@ -1,5 +1,5 @@
 #### Change parameters here #####
-$TenantID=""
+$TenantID="" 
 $Location="eastus"
 # xlsx file with SubscriptionName and TagName 
 $TagFileSubs = "C:\_repo\Azure\Scripts\Policies\Tags\Tags-Subscriptions.xlsx"

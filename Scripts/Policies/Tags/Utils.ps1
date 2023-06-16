@@ -4,7 +4,7 @@ Get-AzPolicyRemediation | Where-Object {$_.ProvisioningState -eq "Evaluating"} |
 
 Get-Module -Name Az -ListAvailable
 Get-Module -Name Az.Resources -All
-
+ 
 Get-InstalledModule -Name Az -AllVersions
 Get-InstalledModule -Name Az 
 Get-InstalledModule Azure -AllVersions
