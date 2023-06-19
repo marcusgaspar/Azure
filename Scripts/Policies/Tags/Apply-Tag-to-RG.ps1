@@ -1,5 +1,5 @@
 #### Change parameters here #####
-$TenantID="" 
+$TenantID="945bf48e-bff2-44cc-9c6f-2dd21866bf6a" 
 # xlsx file with TagName and TagValue columns 
 $TagFile = "C:\_repo\Azure\Scripts\Policies\Tags\Tags-RGs.xlsx"
 # Log file
@@ -39,8 +39,14 @@ foreach ($row in $TagData) {
     Write-Host "Applying tag '$tagName' with value '$tagValue' to resource group '$resourceGroupName' on the subscription '$subscriptionName'..." -ForegroundColor Green
     
     # Get the subscription ID and Set the context to the subscription
-    $SubscriptionID = (Get-AzSubscription -SubscriptionName $SubscriptionName -TenantId $TenantID).Id
-    Set-AzContext -Subscription $SubscriptionID -Tenant $TenantID
+    $Subscription = Get-AzSubscription -SubscriptionName $SubscriptionName -TenantId $TenantID -ErrorAction SilentlyContinue
+    if ($null -ne $Subscription) {
+        $SubscriptionID = $Subscription.Id
+        Set-AzContext -Subscription $SubscriptionID -Tenant $TenantID
+    } else {
+        Write-Host "Subscription Name $SubscriptionName not found. Skipping..." -ForegroundColor Yellow
+        continue
+    }    
 
     # Get the resource group
     $resourceGroup = Get-AzResourceGroup -Name $resourceGroupName -ErrorAction SilentlyContinue
@@ -53,7 +59,8 @@ foreach ($row in $TagData) {
         Set-AzResourceGroup -ResourceId $resourceGroup.ResourceId -Tag $tags
         Write-Host "Tag applied successfully." -ForegroundColor Green
     } else {
-        Write-Host "Resource group not found." -ForegroundColor Red
+        Write-Host "Resource group $resourceGroupName not found. Skipping..." -ForegroundColor Yellow
+        continue
     }
 }
 
