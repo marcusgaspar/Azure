@@ -1,5 +1,5 @@
 #### Change parameters here #####
-$TenantID="945bf48e-bff2-44cc-9c6f-2dd21866bf6a" 
+$TenantID="" 
 # xlsx file with TagName and TagValue columns 
 $TagFile = "C:\_repo\Azure\Scripts\Policies\Tags\Tags-RGs.xlsx"
 # Log file
