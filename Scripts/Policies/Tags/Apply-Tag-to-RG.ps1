@@ -22,6 +22,10 @@ if (-not (Get-Module -Name ImportExcel -ListAvailable)) {
 }
 Import-Module -Name ImportExcel
 
+if (-not (Get-Module -Name Az -ListAvailable)) {
+    Install-Module -Name Az -Repository PSGallery -Force
+}
+
 # Login to Azure
 Connect-AzAccount -Tenant $TenantID -WarningAction SilentlyContinue
 

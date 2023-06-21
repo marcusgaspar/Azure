@@ -1,3 +1,15 @@
+$PSVersionTable.PSVersion
+Get-Module -Name AzureRM -ListAvailable
+winget search Microsoft.PowerShell
+winget install --id Microsoft.Powershell --source winget
+winget install --id Microsoft.Powershell.Preview --source winget
+
+Get-ExecutionPolicy -List
+
+Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope CurrentUser
+
+Install-Module -Name Az -Repository PSGallery -Force
+
 Get-AzPolicyRemediation | Where-Object {$_.ProvisioningState -ne "Succeeded"} 
 
 Get-AzPolicyRemediation | Where-Object {$_.ProvisioningState -eq "Evaluating"} | Stop-AzPolicyRemediation
