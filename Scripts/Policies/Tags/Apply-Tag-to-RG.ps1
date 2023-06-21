@@ -35,9 +35,14 @@ foreach ($row in $TagData) {
     $resourceGroupName = $row.$resourceGroupNameColumn
     $tagName = $row.$tagNameColumn
     $tagValue = $row.$tagValueColumn
-    
+        
+    if ($null -eq $tagName -or $null -eq $tagValue) {
+        Write-Host "Skipping row because tagName or tagValue is null." -ForegroundColor Yellow
+        continue
+    }
+
     Write-Host "Applying tag '$tagName' with value '$tagValue' to resource group '$resourceGroupName' on the subscription '$subscriptionName'..." -ForegroundColor Green
-    
+
     # Get the subscription ID and Set the context to the subscription
     $Subscription = Get-AzSubscription -SubscriptionName $SubscriptionName -TenantId $TenantID -ErrorAction SilentlyContinue
     if ($null -ne $Subscription) {
@@ -56,6 +61,7 @@ foreach ($row in $TagData) {
         # Apply the tag to the resource group
         $tags = $resourceGroup.Tags
         $tags[$tagName] = $tagValue
+
         Set-AzResourceGroup -ResourceId $resourceGroup.ResourceId -Tag $tags
         Write-Host "Tag applied successfully." -ForegroundColor Green
     } else {
