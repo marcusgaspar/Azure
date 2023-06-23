@@ -1,5 +1,5 @@
 #### Change parameters here #####
-$TenantID=""  
+$TenantID="945bf48e-bff2-44cc-9c6f-2dd21866bf6a"  
 # xlsx file with TagName and TagValue columns 
 $TagFile = "C:\_repo\Azure\Scripts\Policies\Tags\Tags-RGs.xlsx"
 # Log file
@@ -15,6 +15,13 @@ $tagValueColumn = "TagValue"
 # Start logging
 Start-Transcript -Path $LogFile
 Write-Host "Script Started" -ForegroundColor Green
+
+if ($TenantID -eq $null -or $TenantID -eq "") {
+    Write-Host "Tenant ID is null. Add the Azure AD Tenant Id to the TenantID variable." -ForegroundColor Red
+    exit 
+} else {
+    # Continue with the script
+}
 
 # Import the ImportExcel module
 if (-not (Get-Module -Name ImportExcel -ListAvailable)) {
@@ -63,7 +70,11 @@ foreach ($row in $TagData) {
     # Check if the resource group was found
     if ($null -ne $resourceGroup) {
         # Apply the tag to the resource group
-        $tags = $resourceGroup.Tags
+        if ($null -eq $resourceGroup.Tags) {
+            $tags = @{}
+        } else {
+            $tags = $resourceGroup.Tags
+        }
         $tags[$tagName] = $tagValue
 
         Set-AzResourceGroup -ResourceId $resourceGroup.ResourceId -Tag $tags

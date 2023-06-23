@@ -6,7 +6,7 @@ winget install --id Microsoft.Powershell.Preview --source winget
 
 Get-ExecutionPolicy -List
 
-Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope CurrentUser
+Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope LocalMachine
 
 Install-Module -Name Az -Repository PSGallery -Force
 
