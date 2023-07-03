@@ -8,23 +8,18 @@
             "equals": "Microsoft.Resources/subscriptions/resourceGroups"
           },
           {
-            "anyOf": [
-              {
-                "field": "[concat('tags[',parameters('tagName'), ']')]",
-                "exists": false
-              },
-              {
-                "field": "[concat('tags[',parameters('tagName'), ']')]",
-                "equals": ""
-              },
-              {
-                "field": "[concat('tags[',parameters('tagName'), ']')]",
-                "notMatch": "[concat('PN','########')]"
-              },
-              {
-                "field": "[concat('tags[',parameters('tagName'), ']')]",
-                "notMatch": "[concat('PNU','########')]"
-              }
+            "field": "[concat('tags[',parameters('tagName'), ']')]",
+            "notMatch": "PN########"
+          },
+          {
+            "field": "[concat('tags[',parameters('tagName'), ']')]",
+            "notMatch": "PNU#######"
+          },
+          {
+            "field": "[concat('tags[',parameters('tagName'), ']')]",
+            "notIn": [
+              "shd-local",
+              "shd-global"
             ]
           }
         ]
