@@ -1,0 +1,45 @@
+{
+    "mode": "All",
+    "policyRule": {
+      "if": {
+        "allOf": [
+          {
+            "field": "type",
+            "equals": "Microsoft.Resources/subscriptions/resourceGroups"
+          },
+          {
+            "anyOf": [
+              {
+                "field": "[concat('tags[',parameters('tagName'), ']')]",
+                "exists": false
+              },
+              {
+                "field": "[concat('tags[',parameters('tagName'), ']')]",
+                "equals": ""
+              },
+              {
+                "field": "[concat('tags[',parameters('tagName'), ']')]",
+                "notMatch": "[concat('PN','########')]"
+              },
+              {
+                "field": "[concat('tags[',parameters('tagName'), ']')]",
+                "notMatch": "[concat('PNU','########')]"
+              }
+            ]
+          }
+        ]
+      },
+      "then": {
+        "effect": "audit"
+      }
+    },
+    "parameters": {
+      "tagName": {
+        "type": "String",
+        "metadata": {
+          "displayName": "tagName",
+          "description": "Name of the tag, such as costCenter"
+        }
+      }
+    }
+  }

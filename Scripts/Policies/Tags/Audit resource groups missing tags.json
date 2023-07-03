@@ -1,0 +1,29 @@
+{
+    "mode": "All",
+    "policyRule": {
+      "if": {
+        "allOf": [
+          {
+            "field": "type",
+            "equals": "Microsoft.Resources/subscriptions/resourceGroups"
+          },
+          {
+            "field": "[concat('tags[',parameters('tagName'), ']')]",
+            "exists": false
+          }
+        ]
+      },
+      "then": {
+        "effect": "audit"
+      }
+    },
+    "parameters": {
+      "tagName": {
+        "type": "String",
+        "metadata": {
+          "displayName": "tagName",
+          "description": "Name of the tag, such as costCenter"
+        }
+      }
+    }
+  }
