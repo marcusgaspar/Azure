@@ -1,0 +1,15 @@
+################################################################################
+    # Change hosts file - begin
+    # Configure hosts file for Private link endpoints resolution    
+    $file = "C:\Windows\System32\drivers\etc\hosts"
+ 
+    $hostfile = Get-Content $file
+    $hostfile += "172.16.0.68 gbl.his.arc.azure.com"
+    $hostfile += "172.16.0.69 brs.his.arc.azure.com"
+    $hostfile += "172.16.0.70 agentserviceapi.guestconfiguration.azure.com"
+    $hostfile += "172.16.0.71 brazilsouth-gas.guestconfiguration.azure.com"
+    $hostfile += "172.16.0.72 brazilsouth.dp.kubernetesconfiguration.azure.com"
+    $hostfile += "172.16.0.73 brazil-ats.his.arc.azure.com"
+    Set-Content -Path $file -Value $hostfile -Force
+    # Change hosts file - end
+################################################################################
