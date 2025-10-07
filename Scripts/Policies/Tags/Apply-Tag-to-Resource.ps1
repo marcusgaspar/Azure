@@ -11,6 +11,7 @@
   - Usa Update-AzTag -Operation Merge (mescla com tags existentes).
   - Alterna de assinatura via coluna "Subscription" (nome ou GUID), quando presente.
   - Gera um sumário ao final.
+  - Antes de rodar, verifique as variáveis $TenantID e $SubscriptionID 
 
 .PARAMETER ExcelPath
   Caminho do arquivo .xlsx
@@ -52,6 +53,7 @@ param(
   [switch]$VerboseLog
 )
 
+# Configurar aqui o Tenant ID e Subscription ID
 $TenantID=""
 $SubscriptionID=""
 
